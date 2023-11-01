@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="px-4 py-5 my-5 text-center">
+		<img class="d-block mx-auto mb-4" src="https://icons.getbootstrap.com/assets/icons/person.svg" alt="" width="72" height="57">
+
+ 		<h1 class="display-5 fw-bold"> {{ customer.name }} </h1>
+
+
+		<div class="d-grid gap-4 d-sm-flex justify-content-sm-center">
+			<button type="button" class="btn btn-outline-secondary btn-lg px-4" onClick="javascript:history.go(-1);" >Back</button>
+		</div>
+
+	</div>
+
+	<!-- Render the list of active borrowings -->
+	
+	{% if borrows_all %}
+
+		<div id="main" style="padding-left: 2rem;">
+
+			<!-- Customer Info -->
+			<!-- filter "1" for pluralisation -->
+			{% if borrows_all|length == 1 %}
+				<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+					<p class="fs-5 text-muted"> {{customer.name}} has loaned {{ borrows_all|length }} book during their time as a customer here. <br> That book is: </p>
+				</div>
+			{% else %}
+				<div class="pricing-header p-0 pb-md-4 mx-auto text-center">
+					<p class="fs-5 text-muted"> {{customer.name}} has loaned {{ borrows_all|length }} books during their time as a customer here. <br> Those books are: </p>
+				</div>
+			{% endif %}
+
+			<!-- Current Borrows -->
+			{% if borrows_current %}
+
+				<!-- title -->
+				<h4 class="card-title" style="margin-bottom: 1rem;"> Books Currently on Loan by {{ customer.name }} </h4>
+
+				{% for b in borrows_current %}
+					<div class="card" style="width: 45vw; padding: 2rem; margin-right: 2rem; margin-bottom: 2rem; display: inline-block;">
+						<div class="card-body" style="padding: 1rem;">
+							<h4 class="card-title" style="margin-bottom: 1rem;"> {{ b.book_id }} </h4>
+							<h6 class="card-subtitle mb-2 text-muted">Due back {{ b.due_date }}. </h6>
+							<a href="{% url 'single_book' bookid=b.book_id.id %}" class="btn btn-primary" style="font-size: 2rem; font-weight: 600; margin-top: 2rem;">See book page</a>
+						</div>
+					</div>
+				{% endfor %}
+
+			{% endif %}
+
+
+			<!-- Past Borrows -->
+			{% if borrows_past %}
+
+				<!-- title -->
+				<h4 class="card-title" style="margin-bottom: 1rem;"> Books Loaned in the Past by {{ customer.name }} </h4>
+
+				{% for b in borrows_past %}
+					<div class="card" style="width: 45vw; padding: 2rem; margin-right: 2rem; margin-bottom: 2rem; display: inline-block;">
+						<div class="card-body" style="padding: 1rem;">
+							<h4 class="card-title" style="margin-bottom: 1rem;"> {{ b.book_id }} </h4>
+							<h6 class="card-subtitle mb-2 text-muted">Returned on {{ b.due_date }}. </h6>
+							<a href="{% url 'single_book' bookid=b.book_id.id %}" class="btn btn-primary" style="font-size: 2rem; font-weight: 600; margin-top: 2rem;">See book page</a>
+						</div>
+					</div>
+				{% endfor %}
+
+			{% endif %}
+
+
+		</div>
+
+	{% endif %}
+	
+	
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="px-4 py-5 my-4 text-center">
+
+		<a href="{% url 'edit_book' bookid=book.id %}" style="margin-left:50vw" class="btn btn-outline-primary float-right">Edit</a>
+
+
+		<img class="d-block mx-auto mb-4" src="https://icons.getbootstrap.com/assets/icons/book.svg" alt="" width="72" height="57">
+
+		<h1 class="display-5 fw-bold"> {{ book.title }} </h1>
+
+		<div class="col-lg-6 mx-auto">
+			<p class="lead mb-4">First Published by {{ book.author }} in {{ book.year }}</p>
+			<p class="lead mb-4"> {{ book.synopsis }} </p>
+
+			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+				<!-- disable the button if no copies are available -->
+				{% if borrows|length >= book.copies %}
+					<button type="button" id="buy-btn" class="btn btn-primary btn-lg px-4 gap-3" disabled>No Copies Available</button>
+				{% else %}
+					<button type="button" id="buy-btn" class="btn btn-primary btn-lg px-4 gap-3" onClick="innerHTML='Bought!'">Buy Now: €{{ book.price }}</button>
+				{% endif %}
+				<button type="button" class="btn btn-outline-secondary btn-lg px-4" onClick="javascript:history.go(-1);" >Back</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Render the list of active borrowings -->
+
+	<div id="main" style="padding-left: 2rem; padding-top: 2rem;">
+
+	<!-- filter "1" for pluralisation or if no borrows-->
+	{% if not borrows %}
+
+		<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+			<p class="fs-5 text-muted">No copies on loan. {{ book.copies }} total available.</p>
+		</div>
+
+	{% elif borrows|length == 1 %}
+
+		<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+			<p class="fs-5 text-muted">{{ borrows|length }} copy on loan out of {{ book.copies }} total available.<br>On loan by:</p>
+		</div>
+
+	{% else %}
+
+		<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+			<p class="fs-5 text-muted">{{ borrows|length }} copies on loan out of {{ book.copies }} total available.<br>On loan by:</p>
+		</div>
+
+	{% endif %}
+
+	<!-- render borrows -->
+	{% for b in borrows %}
+		<div class="card" style="width: 45vw; padding: 2rem; margin-right: 2rem; margin-bottom: 2rem; display: inline-block;">
+			<div class="card-body" style="padding: 1rem;">
+				<h4 class="card-title" style="margin-bottom: 1rem;"> {{ b.customer_id }} </h4>
+				<h6 class="card-subtitle mb-2 text-muted">Due back {{ b.due_date }}. </h6>
+				<a href="{% url 'single_customer' customer_id=b.customer_id.id %}" class="btn btn-primary" style="font-size: 2rem; font-weight: 600; margin-top: 2rem;">See customer</a>
+			</div>
+		</div>
+	{% endfor %}
+
+
+	
+	
+{% endblock %}

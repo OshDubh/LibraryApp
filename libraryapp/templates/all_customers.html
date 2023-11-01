@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div id="main" style="padding-left: 2rem; padding-top: 2rem;">
+
+		<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+			<h1 class="display-4 fw-normal">Duggano5's Customers</h1>
+			<p class="fs-5 text-muted">All the esteemed customers who frequent Duggan's Library</p>
+		</div>
+
+		{% for c in customers %}
+			<div class="card" style="width: 45vw; padding: 2rem; margin-right: 2rem; margin-bottom: 2rem; display: inline-block;">
+				<div class="card-body" style="padding: 1rem;">
+					<h4 class="card-title" style="margin-bottom: 1rem;"> {{ c.name }} </h4>
+					<a href="{% url 'single_customer' customer_id=c.id %}" class="btn btn-primary" style="font-size: 2rem; font-weight: 600; margin-top: 2rem;">See info</a>
+				</div>
+			</div>
+		{% endfor %}
+
+
+
+	</div>
+	
+{% endblock %}
